@@ -11,3 +11,12 @@ func DesTest() {
 	strByteSlice = DecryptDES(strByteSlice, key)
 	fmt.Println("解密之后的明文：", string(strByteSlice))
 }
+
+func DesTest2(str string) {
+	fmt.Println("===== des 加解密测试")
+	src := []byte(str)
+	key := []byte("12345678")
+	strByteSlice := EncryptDES(src, key)
+	strByteSlice = DecryptDES(strByteSlice, key)
+	fmt.Println("解密之后的明文：", string(strByteSlice))
+}

@@ -7,5 +7,6 @@ import (
 //main.go用来测试各个加密算法
 
 func main() {
-	my_crypto.DesTest()
+	my_crypto.DesTest2("天真烂漫")
+	my_crypto.TripleDesTest2("无法无天")
 }
