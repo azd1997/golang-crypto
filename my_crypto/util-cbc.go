@@ -39,3 +39,10 @@ func HandleError(err error) {
 		log.Panic(err)
 	}
 }
+
+func HandleErrorTwo(para []byte, err error) ([]byte, error) {
+	if err != nil {
+		return para, err
+	}
+	return para, nil
+}

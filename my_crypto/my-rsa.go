@@ -56,3 +56,50 @@ func RsaGenKey(bitsLen int) error {
 
 	return nil
 }
+
+/*使用公钥进行加密*/
+func EncryptRSAPubKey(src []byte, pathName string) ([]byte, error) {
+	var msg []byte
+
+	//1.将公钥文件中的公钥读出，得到使用pem编码的字节
+	file, err := os.Open(pathName)
+	HandleError(err)
+	info, err := file.Stat()
+	HandleError(err)
+	recvBuf := make([]byte, info.Size())
+	_, err = file.Read(recvBuf)
+	HandleError(err)
+	//2.将得到的字符串pem解码
+	block, _ := pem.Decode(recvBuf)
+	//3.使用x509将编码之后的公钥解析出来
+	pubInter, err := x509.ParsePKIXPublicKey(block.Bytes)
+	HandleError(err)
+	pubKey := pubInter.(*rsa.PublicKey) //TODO
+	//4.使用得到的公钥通过rsa进行数据加密
+	msg, err = rsa.EncryptPKCS1v15(rand.Reader, pubKey, src)
+
+	return msg, nil
+
+}
+
+/*使用私钥解密*/
+func DecryptRSAPrivKey(src []byte, pathName string) ([]byte, error) {
+	var msg []byte
+
+	//1.将私钥文件中的私钥读出，得到使用pem编码的字节
+	file, err := os.Open(pathName)
+	HandleError(err)
+	info, _ := file.Stat()
+	recvBuf := make([]byte, info.Size())
+	_, _ = file.Read(recvBuf)
+	//2.将得到的字符串pem解码
+	block, _ := pem.Decode(recvBuf)
+	//3.使用x509将编码之后的私钥解析出来
+	privateKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+	HandleError(err)
+	//4.使用得到的私钥通过rsa进行数据解密
+	msg, err = rsa.DecryptPKCS1v15(rand.Reader, privateKey, src)
+	HandleError(err)
+
+	return msg, nil
+}
