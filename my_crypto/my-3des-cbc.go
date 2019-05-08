@@ -5,6 +5,8 @@ import (
 	"crypto/des"
 )
 
+//3des根据密钥24B（3个8B密钥）之间同与不同以及先后顺序，有不同的应用场景
+
 //3des对称加密
 func Encrypt3DES(src, key []byte) []byte {
 	//创建并返回一个使用DES算法的cipher.Block接口
